@@ -8,15 +8,17 @@ import (
 	repo "github.com/laironacosta/ms-gin-go/repository"
 	"github.com/laironacosta/ms-gin-go/router"
 	"github.com/laironacosta/ms-gin-go/services"
+	"os"
 )
 
 func main() {
 	gin := gin.Default()
 
 	db := pgdb.NewPgDB(&pg.Options{
-		User:     "postgres",
-		Password: "postgres",
-		Database: "pg-db-go",
+		Addr:     os.Getenv("DB_HOST"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		Database: os.Getenv("DB_NAME"),
 	})
 
 	userRepo := repo.NewUserRepository(db)
