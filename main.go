@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-pg/pg/v10"
 	"github.com/laironacosta/ms-gin-go/controllers"
+	"github.com/laironacosta/ms-gin-go/migrations"
 	repo "github.com/laironacosta/ms-gin-go/repository"
 	"github.com/laironacosta/ms-gin-go/router"
 	"github.com/laironacosta/ms-gin-go/services"
@@ -20,6 +21,7 @@ func main() {
 		Password: os.Getenv("DB_PASSWORD"),
 		Database: os.Getenv("DB_NAME"),
 	})
+	migrations.Init(db)
 
 	userRepo := repo.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)

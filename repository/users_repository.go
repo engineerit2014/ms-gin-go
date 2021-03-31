@@ -7,14 +7,14 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	Create(ctx context.Context, user dto.User) error
+	Create(ctx context.Context, request dto.CreateUserRequest) error
 	GetByEmail(ctx context.Context, email string) (*dto.User, error)
-	UpdateByEmail(ctx context.Context, email string) error
+	UpdateByEmail(ctx context.Context, request dto.UpdateUserRequest, email string) error
 	DeleteByEmail(ctx context.Context, email string) error
 }
 
 type UserRepository struct {
-	DB *pg.DB
+	db *pg.DB
 }
 
 func NewUserRepository(db *pg.DB) UserRepositoryInterface {
@@ -23,18 +23,41 @@ func NewUserRepository(db *pg.DB) UserRepositoryInterface {
 	}
 }
 
-func (r *UserRepository) Create(ctx context.Context, user dto.User) error {
+func (r *UserRepository) Create(ctx context.Context, request dto.CreateUserRequest) error {
+	u := dto.User{
+		request.Name,
+		request.Email,
+	}
+	_, err := r.db.Model(&u).Context(ctx).Insert()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*dto.User, error) {
-	return &dto.User{}, nil
+	u := dto.User{}
+	err := r.db.Model(&u).Context(ctx).Where("email = ?", email).Select()
+	if err != nil {
+		return &u, err
+	}
+	return &u, nil
 }
 
-func (r *UserRepository) UpdateByEmail(ctx context.Context, email string) error {
+func (r *UserRepository) UpdateByEmail(ctx context.Context, request dto.UpdateUserRequest, email string) error {
+	u := dto.User{}
+	_, err := r.db.Model(&u).Context(ctx).Set("name = ?", request.Name).Where("email = ?", email).Update()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (r *UserRepository) DeleteByEmail(ctx context.Context, email string) error {
+	u := dto.User{}
+	_, err := r.db.Model(&u).Context(ctx).Where("email = ?", email).Delete()
+	if err != nil {
+		return err
+	}
 	return nil
 }
