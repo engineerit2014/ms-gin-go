@@ -27,7 +27,7 @@ func NewUserController(userService services.UserServiceInterface) UserController
 }
 
 func (ctr *UserController) Create(c *gin.Context) {
-	u := dto.User{}
+	u := dto.CreateUserRequest{}
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -48,15 +48,20 @@ func (ctr *UserController) Create(c *gin.Context) {
 
 func (ctr *UserController) GetByEmail(c *gin.Context) {
 	e := c.Param("email")
-
 	fmt.Printf("Path param received: %+v \n", e)
-	c.JSON(http.StatusOK, dto.User{
-		Email: e,
-	})
+
+	u, err := ctr.userService.GetByEmail(context.Background(), e)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, u)
 }
 
 func (ctr *UserController) UpdateByEmail(c *gin.Context) {
-	u := dto.User{}
+	u := dto.UpdateUserRequest{}
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -68,12 +73,26 @@ func (ctr *UserController) UpdateByEmail(c *gin.Context) {
 
 	fmt.Printf("Request received: %+v \n", u)
 	fmt.Printf("Path param received: %+v \n", e)
-	c.JSON(http.StatusOK, u)
+
+	if err := ctr.userService.UpdateByEmail(context.Background(), u, e); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "updated"})
 }
 
 func (ctr *UserController) DeleteByEmail(c *gin.Context) {
 	e := c.Param("email")
 
 	fmt.Printf("Path param received: %+v \n", e)
+
+	if err := ctr.userService.DeleteByEmail(context.Background(), e); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
 }
