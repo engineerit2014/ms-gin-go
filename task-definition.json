@@ -9,7 +9,7 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/ms-gin-go-task-definition",
+          "awslogs-group": "/ecs/ms-gin-go-app-task-definition",
           "awslogs-region": "us-east-2",
           "awslogs-stream-prefix": "ecs"
         }
@@ -42,7 +42,7 @@
       "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "alpine:latest",
+      "image": "027479467189.dkr.ecr.us-east-2.amazonaws.com/dev-repos",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -59,7 +59,7 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "ms-gin-go-container"
+      "name": "ms-gin-go-app"
     }
   ],
   "placementConstraints": [],
@@ -69,8 +69,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-task-definition:7",
-  "family": "ms-gin-go-task-definition",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-app-task-definition:1",
+  "family": "ms-gin-go-app-task-definition",
   "requiresAttributes": [
     {
       "targetId": null,
@@ -88,6 +88,12 @@
       "targetId": null,
       "targetType": null,
       "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
     },
     {
@@ -95,6 +101,12 @@
       "targetType": null,
       "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
       "targetId": null,
@@ -115,7 +127,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "256",
-  "revision": 7,
+  "revision": 1,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
