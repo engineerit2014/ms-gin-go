@@ -32,7 +32,7 @@ name: Deploy to Amazon ECS
 jobs:
   deploy:
     name: Deploy
-    runs-on: alpine-latest
+    runs-on: ubuntu-latest
     environment: develop
 
     steps:
