@@ -54,7 +54,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: dev-repos
+        ECR_REPOSITORY: ms-gin-go
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
@@ -69,13 +69,13 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: ms-gin-go-app
+        container-name: ms-gin-go-container
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ms-gin-go-app-service
+        service: ms-gin-go-container-service
         cluster: dev-cluster
         wait-for-service-stability: true
