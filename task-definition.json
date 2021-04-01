@@ -9,7 +9,7 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/ms-gin-go-app-task-definition",
+          "awslogs-group": "/ecs/ms-gin-go-task-def",
           "awslogs-region": "us-east-2",
           "awslogs-stream-prefix": "ecs"
         }
@@ -42,7 +42,7 @@
       "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "027479467189.dkr.ecr.us-east-2.amazonaws.com/dev-repos",
+      "image": "027479467189.dkr.ecr.us-east-2.amazonaws.com/ms-gin-go",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -59,7 +59,7 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "ms-gin-go-app"
+      "name": "ms-gin-go-container"
     }
   ],
   "placementConstraints": [],
@@ -69,8 +69,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-app-task-definition:1",
-  "family": "ms-gin-go-app-task-definition",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-task-def:1",
+  "family": "ms-gin-go-task-def",
   "requiresAttributes": [
     {
       "targetId": null,
