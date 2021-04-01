@@ -69,13 +69,13 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: alpine
+        container-name: ms-gin-go-container
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: alpine-service
-        cluster: default
+        service: ms-gin-go-container-service
+        cluster: default-dev
         wait-for-service-stability: true
