@@ -69,7 +69,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-task-definition:3",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-2:027479467189:task-definition/ms-gin-go-task-definition:7",
   "family": "ms-gin-go-task-definition",
   "requiresAttributes": [
     {
@@ -115,7 +115,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "256",
-  "revision": 3,
+  "revision": 7,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
