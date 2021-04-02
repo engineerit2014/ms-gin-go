@@ -1,25 +1,42 @@
 package main
 
 import (
-	"github.com/Lairon/db-go/pgdb"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-pg/pg/v10"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/laironacosta/ms-gin-go/controllers"
+	"github.com/laironacosta/ms-gin-go/database"
 	"github.com/laironacosta/ms-gin-go/migrations"
 	repo "github.com/laironacosta/ms-gin-go/repository"
 	"github.com/laironacosta/ms-gin-go/router"
 	"github.com/laironacosta/ms-gin-go/services"
-	"os"
+	"github.com/pkg/errors"
 )
+
+// cfg is the struct type that contains fields that stores the necessary configuration
+// gathered from the environment.
+var cfg struct {
+	DBUser string `envconfig:"DB_USER" default:"root"`
+	DBPass string `envconfig:"DB_PASS" default:"root"`
+	DBName string `envconfig:"DB_NAME" default:"user"`
+	DBHost string `envconfig:"DB_HOST" default:"db"`
+	DBPort int    `envconfig:"DB_PORT" default:"5432"`
+}
 
 func main() {
 	gin := gin.Default()
 
-	db := pgdb.NewPgDB(&pg.Options{
-		Addr:     os.Getenv("DB_HOST"),
-		User:     os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASSWORD"),
-		Database: os.Getenv("DB_NAME"),
+	if err := envconfig.Process("LIST", &cfg); err != nil {
+		err = errors.Wrap(err, "parse environment variables")
+		return
+	}
+
+	db := database.NewPgDB(&pg.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.DBHost, cfg.DBPort),
+		User:     cfg.DBUser,
+		Password: cfg.DBPass,
+		Database: cfg.DBName,
 	})
 	migrations.Init(db)
 

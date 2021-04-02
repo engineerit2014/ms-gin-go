@@ -1,36 +1,31 @@
 version: '3'
+
 networks:
   ms-go-network:
     driver: bridge
+
 services:
-  db-postgres:
-    image: postgres:latest
-    container_name: full_db_postgres
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    ports:
-      - '5432:5432'
-    restart: on-failure
-    volumes:
-      - database_postgres:/var/lib/postgresql/data
-    networks:
-      - ms-go-network
   app:
-    container_name: full_app
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     ports:
-      - 8080:8080
-    restart: on-failure
-    volumes:
-      - api:/usr/src/app/
-    env_file:
-      - .env
+      - "8080:8080"
     depends_on:
-      - db-postgres
+      - db
+    restart: on-failure
     networks:
       - ms-go-network
-volumes:
-  api:
-  database_postgres:
+  db:
+    image: postgres:13.2
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: user
+    restart: on-failure
+    networks:
+      - ms-go-network
