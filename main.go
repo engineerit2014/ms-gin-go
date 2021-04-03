@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-pg/pg/v10"
 	"github.com/kelseyhightower/envconfig"
+	pgKit "github.com/laironacosta/kit-go/postgresql"
 	"github.com/laironacosta/ms-gin-go/controllers"
-	"github.com/laironacosta/ms-gin-go/database"
 	"github.com/laironacosta/ms-gin-go/migrations"
 	repo "github.com/laironacosta/ms-gin-go/repository"
 	"github.com/laironacosta/ms-gin-go/router"
@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 
-	db := database.NewPgDB(&pg.Options{
+	db := pgKit.NewPgDB(&pg.Options{
 		Addr:     fmt.Sprintf("%s:%d", cfg.DBHost, cfg.DBPort),
 		User:     cfg.DBUser,
 		Password: cfg.DBPass,
